@@ -23,6 +23,7 @@ Agent UI/UX — Domain authority on Human-Centered User Experience, cognitive lo
 
 * **UX Design Process Workflow:** `docs/design-process/workflow.md` (Defines the Double Diamond process and standard audit criteria)
 * **Cognitive Walkthrough Playbook:** `docs/design-process/cognitive-walkthrough-playbook.md` (Hands-on workbook for atomic-step journey auditing)
+* **VVS Integration Guide:** `docs/design-process/vvs-integration.md` (How to programmatically call Visual Verification Service endpoints for Grade A evidence and usability testing)
 
 ## Available Commands
 
