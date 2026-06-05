@@ -18,7 +18,7 @@ Step 1: Scoping ──► Step 2: Decomposition ──► Step 3: Atomic Evaluat
 
 Before starting the walkthrough, you must establish the boundary conditions. Document the following envelope in the matter manifest:
 
-1. **The User Persona Profile:**
+1. **The User Persona Profile (Evidence Grounded):**
    * **Name/Type:** (e.g., Novice Admin, Executive Manager, SRE Team Member)
    * **Domain Knowledge:** What terms, icons, or concepts does this persona already know? (e.g., "Knows what a repository is, but doesn't know what a Docker volume mounting is.")
    * **Technical Proficiency:** How comfortable are they with complex software?
@@ -33,13 +33,19 @@ Before starting the walkthrough, you must establish the boundary conditions. Doc
 
 ---
 
-## STEP 2: Task Decomposition (15 mins)
+## STEP 2: Task Decomposition & Complexity-Based Budgeting (15 mins)
 
 Break the high-level user goal down into its **atomic actions** – the absolute smallest, individual behaviors the user must execute. 
 
 Do not group multiple steps together. An atomic action is a single movement, click, input, or wait state.
 
-### Example Decomposition ("Deploying a new database"):
+### 1. Establish the Cognitive & Rage-Quit Budget
+Instead of arbitrary time limits, assign a **Complexity-Based Budget** to the journey:
+* **Cognitive Step Cap:** Maximum allowed atomic actions before reaching first value (Target: **≤7 steps** for simple onboarding; **≤15 steps** for complex SRE operations).
+* **Rage-Quit Budget:** Maximum allowed user errors/hesitations before frustration causes the user to abandon the flow. (Target: **0 catastrophic, ≤2 minor errors**).
+* **Attention Scan Pattern:** Identify the primary focus path of the user's eye across the layout at this step (e.g., "Inverted F-pattern starting at top-left logo, sliding to active center panel, ignoring right-hand sidebar").
+
+### 2. Example Decomposition ("Deploying a new database"):
 1. Locate the "Deploy New Service" action button.
 2. Click the "Deploy New Service" button.
 3. Locate the "Service Type" dropdown menu.
@@ -54,7 +60,7 @@ Do not group multiple steps together. An atomic action is a single movement, cli
 
 ## STEP 3: Atomic Step Evaluation (45 mins)
 
-For **every single atomic action** identified in Step 2, run a strict evaluation loop against the **4 Core Cognitive Questions**. Document the answers verbatim:
+For **every single atomic action** identified in Step 2, run a strict evaluation loop against the **5 Core Cognitive Questions**. Document the answers verbatim:
 
 ```markdown
 ### Action [N]: [Action Description]
@@ -80,6 +86,11 @@ For **every single atomic action** identified in Step 2, run a strict evaluation
 * **Cognitive Analysis:** Does the system provide immediate, clear feedback that the action was received and is processing? Does it communicate progress in human-readable terms?
 * **Verdict:** [PASS | FAIL | RISK]
 * **Evidence/Reasoning:** [Cite state changes, loading indicators, progress telemetry, messages]
+
+#### Q5: If the user makes an error, performs an unintended action, or wishes to pivot, is there a clear, painless, and highly visible recovery or reversal path? (Error Tolerance & Recovery)
+* **Cognitive Analysis:** Can the user easily "undo" this step or recover from mistakes without breaking the application state? Is there clear guidance on how to recover?
+* **Verdict:** [PASS | FAIL | RISK]
+* **Evidence/Reasoning:** [Cite escape hatches, cancel buttons, input validation messages, backup triggers]
 ```
 
 ---
@@ -89,7 +100,7 @@ For **every single atomic action** identified in Step 2, run a strict evaluation
 Consolidate all "FAIL" and "RISK" verdicts from your walkthrough into a prioritized, actionable backlog.
 
 ### 1. Assign Severity Ratings
-For every identified UX issue, assign one of the following standard severity ratings:
+For every identified UX issue, assign one of the following standard severity ratings, anchored in measured task success:
 * **Catastrophic (4):** Prevents the user from completing the task or causes critical, irreversible errors.
 * **High (3):** Causes extreme friction, severe confusion, or forces the user to seek external support to continue.
 * **Medium (2):** Causes temporary confusion or annoying friction, but the user is eventually able to recover and proceed.
