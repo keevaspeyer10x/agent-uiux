@@ -1,0 +1,20 @@
+[Unit]
+Description=Agent UI/UX MCP Server
+After=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 25
+WorkingDirectory=/home/keeva/repos/agent-uiux/mcp-server
+ExecStart=/usr/bin/node dist/src/index.js
+EnvironmentFile=/home/keeva/.config/keeva-devtools/secrets/agent.env
+EnvironmentFile=/home/keeva/repos/agent-uiux/mcp-server/deploy/uiux.env
+Environment=UIUX_REPO_ROOT=/home/keeva/repos/agent-uiux
+Environment=PORT=8202
+Restart=on-failure
+RestartSec=15
+
+[Install]
+WantedBy=default.target

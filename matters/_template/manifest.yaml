@@ -1,0 +1,24 @@
+# Standard Matter Manifest — see COO conventions/matters.md
+name: ""
+agent: uiux
+status: intake
+stage: ""
+owner: keeva.speyer@10xlabs.com.au
+shared_with: []
+created: ""
+updated: ""
+
+# Lineage fields for nested work items (see conventions/matters.md → Sub-items).
+# parent: path to parent manifest folder relative to this manifest. Always
+# `../..` for a sub-item (every sub-item sits at {parent}/sub/{slug}/).
+# Omit the field entirely for top-level items.
+# children: auto-maintained list of sub-item slugs. Do not edit by hand;
+# the /sub and /promote commands keep it in sync.
+parent: null
+children: []
+
+drive:
+  folder_id: ""
+  folder_url: ""
+
+domain: {}

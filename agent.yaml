@@ -1,0 +1,97 @@
+schema_version: 1
+id: agent-uiux
+agent_id: agent-uiux
+name: Agent UI/UX
+description: Domain authority on Human-Centered User Experience, cognitive load optimization, and design process.
+owner: keeva.speyer@10xlabs.com.au
+organisation: 10x Labs
+repo: keevaspeyer10x/agent-uiux
+transport: session
+mcp_endpoint: null # session transport only; no remote MCP endpoint is advertised
+visibility: shared
+status: active
+maturity: alpha
+scope: user_experience_and_design_process
+default_identity: Agent UI/UX
+
+routing:
+  requires_explicit_agent_request: true
+  route_when_user_says:
+    - agent-uiux
+    - uiux
+    - Agent UI/UX
+    - UX agent
+    - user experience agent
+    - UIUX agent
+    - UX design critique
+    - review this UX
+  do_not_route_when_user_only_says:
+    - strategy
+    - proposal
+    - website development
+    - backend api
+    - general Apex question
+
+gateway_safety:
+  arbitrary_shell_from_gateway: false
+  client_facing_send_requires_approval: true
+  external_model_disclosure_requires_approval: true
+  allowed_command_presets:
+    - status
+    - intake
+    - critique
+    - ux-review
+    - design-tokens
+    - user-journey
+    - feedback-loop
+
+commands:
+  chief: .claude/commands/chief.md
+  status: .claude/commands/status.md
+  intake: .claude/commands/intake.md
+  critique: .claude/commands/critique.md
+  ux-review: .claude/commands/ux-review.md
+  design-tokens: .claude/commands/design-tokens.md
+  user-journey: .claude/commands/user-journey.md
+  feedback-loop: .claude/commands/feedback-loop.md
+
+work_items:
+  matter_folder: matters
+  matter_template: matters/_template/manifest.yaml
+  ignored_by_default: true
+  per_user_workspace_required: true
+
+dependencies:
+  runtimes:
+    - node>=20
+  local_commands:
+    - npm test
+  scoped_credentials:
+    - name: MultiMinds API
+      purpose: Multi-model consensus review and cognitive walkthrough critique
+      approval_gate: none for local queries
+    - name: Figma
+      purpose: Read-only layout frame inspections and UI structure verification
+      approval_gate: user approval for frame edits
+
+data_classification:
+  committed_ok:
+    - agent instructions
+    - command specs
+    - UX/cognitive theory reference md files
+    - research specifications
+    - blank matter templates
+  never_commit:
+    - user matter directories
+    - client project screenshots
+    - local API keys
+    - raw session logs
+
+validation:
+  local:
+    - npm run build
+    - npm test
+  gateway_conformance:
+    - UX principles are grounded in Don Norman's feedforward/feedback models
+    - no private user workspaces are tracked in git
+    - progressive disclosure rules are verified for active dashboards
