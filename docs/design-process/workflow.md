@@ -117,6 +117,11 @@ In this phase, we execute deterministic checks to verify that the redesigned int
 * **Keyboard Navigation:** Every interactive element must be reachable using the `Tab` key, and have a highly visible focus ring.
 * **Focus Management:** When a modal or accordion is opened, focus must automatically trap inside that container.
 
+#### 3. The Illusion of Semantic Passing (Visual & Network Grounding)
+*   **The Trap:** We forbid declaring visual or layout success based solely on DOM-level semantic passes (like Axe-Core reporting 0 violations). If the network fails to load the stylesheet (404/missing assets), the browser renders an unstyled, raw white page of text, even though DOM accessibility is technically valid.
+*   **The Principle:** Visual quality requires both **functional semantic correctess** AND **successful network resolution of style bundles**. 
+*   **The Bar:** Every deployment must programmatically verify that the compiled CSS asset bundle exists and returns HTTP 200, and we must perform visual pixel-inspection on the final public viewport.
+
 ---
 
 ### PHASE 5: LEARN — Downstream Empirical Usability Testing
