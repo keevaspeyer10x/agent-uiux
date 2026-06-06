@@ -1,0 +1,16 @@
+[Unit]
+Description=work.keeva.space Decision Feed API (FastAPI/uvicorn port 8122)
+After=network.target infra-stack.service
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 25
+WorkingDirectory=/home/keeva/repos/agent-uiux/backend
+ExecStart=/usr/bin/python3 -m uvicorn app:app --host 0.0.0.0 --port 8122
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=default.target
