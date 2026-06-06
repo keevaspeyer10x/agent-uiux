@@ -1,0 +1,20 @@
+# Standard Matter Manifest — see COO conventions/matters.md
+name: "Apex Organiser UX Design"
+agent: uiux
+status: active
+stage: design-verification
+owner: keeva.speyer@10xlabs.com.au
+shared_with: []
+created: "2026-06-06"
+updated: "2026-06-06"
+parent: null
+children: []
+
+drive:
+  folder_id: "17KFf41CfSqWRyzOSpjsHjoTbPjDGQMQA"
+  folder_url: "https://drive.google.com/drive/folders/17KFf41CfSqWRyzOSpjsHjoTbPjDGQMQA"
+
+domain:
+  subdomain: "share.keeva.space/apex-organiser"
+  asana_project: "Today's Actions"
+  prefect_pool: "chief"
