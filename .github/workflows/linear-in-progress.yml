@@ -1,0 +1,67 @@
+name: Mark Linear issue In Progress
+
+on:
+  push:
+    branches:
+      - 'wave*/**'
+      - 'claude/**'
+      - 'fix/**'
+      - 'feat/**'
+      - 'main'
+
+jobs:
+  linear-in-progress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mark In Progress in Linear
+        env:
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, json, urllib.request, re
+
+          key = os.environ.get("LINEAR_API_KEY", "")
+          branch = os.environ.get("BRANCH", "")
+
+          if not key:
+              print("No LINEAR_API_KEY")
+              exit(0)
+
+          nums = re.findall(r'(?<![0-9])([0-9]+)(?![0-9])', branch)
+          if not nums:
+              print(f"No issue number in branch: {branch}")
+              exit(0)
+          num = nums[-1]
+          print(f"Branch {branch} -> issue #{num}")
+
+          def gql(query, variables=None):
+              payload = {"query": query}
+              if variables:
+                  payload["variables"] = variables
+              req = urllib.request.Request(
+                  "https://api.linear.app/graphql",
+                  data=json.dumps(payload).encode(),
+                  headers={"Authorization": key, "Content-Type": "application/json"},
+                  method="POST"
+              )
+              return json.loads(urllib.request.urlopen(req, timeout=10).read())
+
+          r = gql('{ workflowStates(filter: { team: { key: { eq: "KEE" } }, type: { eq: "started" } }) { nodes { id } } }')
+          state_id = r["data"]["workflowStates"]["nodes"][0]["id"]
+
+          r2 = gql('{ issues(filter: { team: { key: { eq: "KEE" } } }, first: 250) { nodes { id identifier title state { type } } } }')
+          pattern = f"#{num}:"
+          matched = 0
+          for iss in r2["data"]["issues"]["nodes"]:
+              if pattern in iss["title"] and iss["state"]["type"] not in ("completed", "canceled"):
+                  gql(
+                      'mutation($id: String!, $s: String!) { issueUpdate(id: $id, input: { stateId: $s }) { success } }',
+                      {"id": iss["id"], "s": state_id}
+                  )
+                  print(f"Marked In Progress: {iss['identifier']} {iss['title'][:55]}")
+                  matched += 1
+
+          if not matched:
+              print(f"No open Linear issue matching #{num}")
+          PYEOF
