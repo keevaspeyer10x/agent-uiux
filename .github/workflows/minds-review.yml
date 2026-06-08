@@ -1,0 +1,18 @@
+name: minds Code Review (Required)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  minds-review:
+    name: Multi-Model Code Review
+    runs-on: [self-hosted, intrepid, minds-review]
+    timeout-minutes: 20
+    steps:
+      - name: Run minds review gate
+        run: |
+          /home/keeva/.local/bin/minds-review-gate \
+            --repo ${{ github.repository }} \
+            --pr ${{ github.event.pull_request.number }} \
+            --base ${{ github.event.pull_request.base.ref }}
