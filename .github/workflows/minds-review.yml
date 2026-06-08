@@ -7,12 +7,21 @@ on:
 jobs:
   minds-review:
     name: Multi-Model Code Review
-    runs-on: [self-hosted, intrepid, minds-review]
-    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - name: Run minds review gate
+      - name: Run minds review via intrepid
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.INTREPID_SSH_KEY }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
         run: |
-          /home/keeva/.local/bin/minds-review-gate \
-            --repo ${{ github.repository }} \
-            --pr ${{ github.event.pull_request.number }} \
-            --base ${{ github.event.pull_request.base.ref }}
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/intrepid_key
+          chmod 600 ~/.ssh/intrepid_key
+          ssh-keyscan -H hermes.keeva.space >> ~/.ssh/known_hosts 2>/dev/null || true
+          ssh -i ~/.ssh/intrepid_key \
+              -o StrictHostKeyChecking=no \
+              -o ConnectTimeout=15 \
+              keeva@hermes.keeva.space \
+              "bash -lc '/home/keeva/.local/bin/minds-review-gate --repo $REPO --pr $PR'"
